@@ -1,40 +1,49 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View,  } from 'react-native';
-import { Checkbox } from 'react-native-paper';
+import { StyleSheet, Text, View } from 'react-native';
+import { Button, Checkbox } from 'react-native-paper';
 
-export interface TaskProps {
+import { TitleTask, Status } from './styled';
+
+interface TaskProps {
+  id: string;
   title: string;
-  key: number;
+  description?: string;
+  status: 'pending' | 'progress' | 'done';
   check: boolean;
-  status: 'pending' | 'done' | 'progress';
+  emoji: string;
+  setCheck: (value: any) => void;
+  handleRemoveTask: (value: string) => void;
 }
 
 const styles = StyleSheet.create({
   card: {
-    flex: 1,
-
-    width: '100%',
+    width: '95%',
 
     display: 'flex',
     flexDirection: 'row',
     
-    backgroundColor: '#fff',
+    backgroundColor: '#4d4d4d',
     borderRadius: 15,
 
-    padding: 25,
+    padding: 15,
     
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
+
+    boxShadow: '0 0 12px 6px rgba(0, 0, 0, 0.3)'
   },
   title: {
-    fontSize: 22,
-    color: '#f60000'
+    marginTop: 30,
+    
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'left'
   },
   square: {
     width: 24,
     height: 24,
     
-    backgroundColor: "#17a9b0",
+    backgroundColor: "#4dd2ff",
     
     opacity: 0.4,
 
@@ -43,49 +52,51 @@ const styles = StyleSheet.create({
     marginRight: 15
   },
   itemText: {
-    width: '70%',
+    width: '50%',
     maxWidth: '80%',
-    color: '#000',
+    color: '#fff',
     fontSize: 12
-  },
-  circular: {
-    width: 12,
-    height: 12,
-    borderColor: '#55BCF6',
-    borderWidth: 2,
-    borderRadius: 5
   }
 });
 
-const Task = ({ title, key, status, check }: TaskProps) => {
-  const [checked, setChecked] = useState<boolean>(false);
-  
-  useEffect(() => {
-    const task = {
-      title,
-      id: key,
-      status,
-      check,
-    };
-    
-    console.log({ task }, 'task');
-
-    setChecked(check);
-  },[title, key, status, check]);
-
+const Task = ({ 
+  title, 
+  status, 
+  check, 
+  id, 
+  description, 
+  setCheck, 
+  emoji, 
+  handleRemoveTask 
+}: TaskProps) => {
   return (
-    <View style={styles.card} key={key}>
-      <View style={styles.square} />
-      <Text style={styles.itemText}>
-        { title } {'|'} { status }
-      </Text>
-      <View style={styles.circular} />
-      <Checkbox 
-        color='#000'
+    <View style={styles.card}>
+      <View style={styles.square}>
+        <Text>
+          { emoji }
+        </Text>
+      </View>
+
+      <TitleTask style={styles.itemText}>
+        { title }
+      </TitleTask>
+      
+      <Status status={status} />
+
+      {/* <Checkbox 
+        color='#fff'
         uncheckedColor='#C9C9C9'
-        status={check ? "checked" : 'unchecked'} 
-        onPress={() => setChecked(!checked)} 
-      />
+        status={checked ? 'checked' : 'indeterminate'} 
+        onPress={() => setChecked((value: boolean) => !value)} 
+      /> */}
+      <Button 
+        icon="delete" 
+        mode="text"
+        color='red'
+        style={{ backgroundColor: 'transparent' }}
+        onPress={() => handleRemoveTask(title)}
+      >
+      </Button>
     </View>
   );
 ;}
