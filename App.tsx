@@ -178,14 +178,14 @@ export default function App() {
       setData(tasks);
 
       const statusEmoj = [
-        { icon: '🦇' },
-        { icon: '🔥' },
-        { icon: '🤩' },
-        { icon: '👨‍💻' },
-        { icon: '👨' },
-        { icon: '🎶' },
-        { icon: '😎' },
-        { icon: '😁' }
+        { icon: '🐮' },
+        { icon: '🤠' },
+        { icon: '🐶' },
+        { icon: '🚜' },
+        { icon: '🐣' },
+        { icon: '🧹' },
+        { icon: '🐴' },
+        { icon: '🐤' }
       ];
       
       setEmojs(statusEmoj);
@@ -212,6 +212,12 @@ export default function App() {
         return;
       }
 
+      if(responsible === '') {
+        window.alert("Preencha o campo do responsável");
+        setResponsible('');
+        return;
+      }
+
       if(title === '') {
         window.alert('Preencha o campo de titulo');
         setTitle('');
@@ -223,6 +229,7 @@ export default function App() {
       setDescription('');
       setTitle('');
       setFilter('');
+      setResponsible('');
     } catch (error: any) {
       throw 'Ocorreu um erro inesperado' + error;
     }
@@ -230,6 +237,7 @@ export default function App() {
 
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
+  const [responsible, setResponsible] = useState<string>('');
   const [emoji, setEmoji] = useState<string>('');
 
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -249,7 +257,7 @@ export default function App() {
           }}
       >
         <Text style={styles.title}>
-          Today`s tasks
+          Farm task 🐮
         </Text>
         <Switch 
           style={{ marginLeft: 40 }}
@@ -284,7 +292,7 @@ export default function App() {
                 flexDirection: 'column' 
               }}
             >  
-              <Text>Enter name task...</Text>
+              <Text>Insira o nome da task...</Text>
               <Input 
                 keyboardType='default' 
                 placeholder='Informe o titulo da task' 
@@ -293,7 +301,7 @@ export default function App() {
                 onChangeText={(text) => setTitle(text)}
               />
               
-              <Text>Enter description task...</Text>
+              <Text>Insira a descrição da task...</Text>
               <Input 
                 keyboardType='default' 
                 placeholder='Informe a descrição da task' 
@@ -301,11 +309,24 @@ export default function App() {
                 style={{ marginBottom: 20 }}
                 onChangeText={(text) => setDescription(text)}
               />
+
               
-              <Text>Select icon task...</Text>
+              <Text>Insira um responsável para a task...</Text>
+              <Input 
+                keyboardType='default' 
+                placeholder='Informe o responsável da task' 
+                value={responsible} 
+                style={{ marginBottom: 20 }}
+                onChangeText={(text) => setResponsible(text)}
+              />
+              
+              <Text>Selecione um ícone para task...</Text>
               <FlatList 
                 data={emojs} 
-                style={{ marginTop: 5, marginBottom: 15 }}
+                style={{ 
+                  marginTop: 5, 
+                  marginBottom: 15 
+                }}
                 horizontal
                 renderItem={({ item }: any) => (
                   <View style={{ padding: 10 }}>
@@ -313,7 +334,10 @@ export default function App() {
                       onPress={() => setEmoji(item.icon)}
                     >
                       <Text
-                        style={{ fontSize: 30 }}
+                        style={{ 
+                          fontSize: 30, 
+                          backgroundColor: `${item.icon === emoji ? 'rgba(0,0,0,0.2)' : 'transparent'}`,
+                        }}
                       >
                         { item.icon }
                       </Text>
@@ -322,14 +346,14 @@ export default function App() {
                 )}
               />
 
-              <Text>Select time task...</Text>
+              {/* <Text>Selecione o dia da task...</Text>
               <View style={{ marginBottom: 10 }}>
                 <Text>
                   Date
                 </Text>
-              </View>
+              </View> */}
 
-              <Text>choose map location task...</Text>
+              {/* <Text>Escolha a localização onde a tarefa será feita...</Text>
               <View 
                 style={{ 
                   marginBottom: 10, 
@@ -342,7 +366,7 @@ export default function App() {
                 }}
               >
                 <Text>MAP</Text>
-              </View>
+              </View> */}
             </View>
 
             <Button 
@@ -436,9 +460,9 @@ export default function App() {
                     setShowModal((value) => !value)
                   }
                 >
-                    <Text style={styles.addText}>
-                      +
-                    </Text>
+                  <Text style={styles.addText}>
+                    +
+                  </Text>
                 </Button>
             </View>
         </KeyboardAvoidingView>
